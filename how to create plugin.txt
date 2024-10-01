@@ -1,0 +1,27 @@
+To create a Flutter plugin, you can use the flutter create command with the --template=plugin option. Here's how to do it step-by-step:
+
+Open your terminal or command prompt.
+
+Navigate to the directory where you want to create your plugin.
+
+Run the following command:
+flutter create --template=plugin --platforms=android,ios flutter_biometric_plugin
+
+Explanation:
+--template=plugin: Specifies that you want to create a plugin.
+--platforms=android,ios : Specifies that you want to add platform like (android, IOS, web) etc
+flutter_biometric_plugin : The name of the plugin you're creating (replace this with your desired plugin name).
+
+
+Optional Flags:
+
+If you want to specify the language for Android (Kotlin or Java) or iOS (Swift or Objective-C), you can add the following flags:
+
+-a kotlin for Kotlin (Android) or -a java for Java (Android).
+-i swift for Swift (iOS) or -i objc for Objective-C (iOS).
+
+For example, if you want to use Kotlin for Android and Swift for iOS, the command would look like this:
+
+flutter create --template=plugin --platforms=android,ios -a kotlin -i swift flutter_biometric_plugin
+
+This command will create a plugin named flutter_biometric_plugin with Android and iOS implementations in Kotlin and Swift, respectively.
