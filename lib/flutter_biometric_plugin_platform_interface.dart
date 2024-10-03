@@ -8,7 +8,8 @@ abstract class FlutterBiometricPluginPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static FlutterBiometricPluginPlatform _instance = MethodChannelFlutterBiometricPlugin();
+  static FlutterBiometricPluginPlatform _instance =
+      MethodChannelFlutterBiometricPlugin();
 
   /// The default instance of [FlutterBiometricPluginPlatform] to use.
   ///
@@ -25,5 +26,15 @@ abstract class FlutterBiometricPluginPlatform extends PlatformInterface {
 
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<String?> getShowBiometricPromt() {
+    throw UnimplementedError(
+        'getShowBiometricPromt() has not been implemented.');
+  }
+
+  Future<String?> checkIsBiometricChange() {
+    throw UnimplementedError(
+        'checkIsBiometricChange() has not been implemented.');
   }
 }
