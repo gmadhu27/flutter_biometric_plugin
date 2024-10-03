@@ -1,6 +1,7 @@
 package com.example.flutter_biometric_plugin
 
 import android.app.Activity
+import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
@@ -15,21 +16,25 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import com.example.flutter_biometric_plugin.helper.BioMetricHelper
 
-/** FlutterBiometricPlugin */
-class FlutterBiometricPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+
+class FlutterBiometricPlugin: FlutterPlugin, ActivityAware, MethodCallHandler {
 
     private lateinit var channel: MethodChannel
-    private var activity: Activity? = null
+    private var activity: FragmentActivity? = null
+
     private val KEY_NAME = "biometric_key"
     private val ANDROID_KEYSTORE = "AndroidKeyStore"
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_biometric_plugin")
         channel.setMethodCallHandler(this)
-    }
-
+      }
+    
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "checkIsBiometricChange") {
+      
+        if (call.method == "getPlatformVersion") {
+            result.success("Android ${android.os.Build.VERSION.RELEASE}")
+          } else if (call.method == "checkIsBiometricChange") {
             val cipher = BioMetricHelper.getCipher(KEY_NAME, ANDROID_KEYSTORE)
             if (cipher == null) {
                 result.success("Success")
@@ -37,14 +42,20 @@ class FlutterBiometricPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 result.success("Failed")
             }
         } else if (call.method == "showBiometricPrompt") {
-            showBiometricPrompt("title", "sub title", result)
+            val title= methodCall.argument<String>("title")
+            val subTitle= methodCall.argument<String>("subtitle")
+            showBiometricPromptDialog(title, subTitle, result)
         } else {
             result.notImplemented()
         }
     }
 
-    private fun showBiometricPrompt(title: String, subTitle: String, _result: MethodChannel.Result) {
-      (activity as? FragmentActivity)?.let { currentActivity -> // Casting Activity to FragmentActivity
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {channel.setMethodCallHandler(null)}
+
+
+    private fun showBiometricPromptDialog(title: String, subTitle: String, _result: MethodChannel.Result) {
+     
+        activity?.let { currentActivity -> 
           val biometricPrompt = BiometricPrompt(
               currentActivity, 
               ContextCompat.getMainExecutor(currentActivity),
@@ -74,31 +85,29 @@ class FlutterBiometricPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
               .build()
   
           biometricPrompt.authenticate(promptInfo)
-      } ?: run {
-          _result.error("NO_ACTIVITY", "No activity available or activity is not a FragmentActivity", null)
-      }
-  }
-  
-  
-         
-    // ActivityAware methods
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
+      
+        } 
     }
 
     override fun onDetachedFromActivity() {
-        activity = null
+         activity = null
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        activity = binding.activity
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        updateAttachedActivity(binding.activity)
+    }
+
+    private fun updateAttachedActivity(childActivity: Activity) {
+        if (childActivity !is FragmentActivity) {
+            return
+        }
+        activity = childActivity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        activity = null
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
-    }
-}
+   }

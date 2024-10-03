@@ -5,11 +5,13 @@ import 'package:flutter_biometric_plugin/flutter_biometric_plugin_method_channel
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelFlutterBiometricPlugin platform = MethodChannelFlutterBiometricPlugin();
+  MethodChannelFlutterBiometricPlugin platform =
+      MethodChannelFlutterBiometricPlugin();
   const MethodChannel channel = MethodChannel('flutter_biometric_plugin');
 
   setUp(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
       channel,
       (MethodCall methodCall) async {
         return '42';
@@ -18,10 +20,11 @@ void main() {
   });
 
   tearDown(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
   test('getPlatformVersion', () async {
-    expect(await platform.getPlatformVersion(), '42');
+    expect(await platform.checkIsBiometricChange(), '42');
   });
 }

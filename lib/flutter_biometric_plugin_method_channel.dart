@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'flutter_biometric_plugin_platform_interface.dart';
@@ -7,15 +6,8 @@ import 'flutter_biometric_plugin_platform_interface.dart';
 class MethodChannelFlutterBiometricPlugin
     extends FlutterBiometricPluginPlatform {
   /// The method channel used to interact with the native platform.
-  @visibleForTesting
-  final methodChannel = const MethodChannel('flutter_biometric_plugin');
 
-  @override
-  Future<String?> getPlatformVersion() async {
-    final result =
-        await methodChannel.invokeMethod<String>('showBiometricPrompt');
-    return result;
-  }
+  final methodChannel = const MethodChannel('flutter_biometric_plugin');
 
   @override
   Future<String?> checkIsBiometricChange() async {
@@ -25,9 +17,14 @@ class MethodChannelFlutterBiometricPlugin
   }
 
   @override
-  Future<String?> getShowBiometricPromt() async {
+  Future<String?> getShowBiometricPromt(String? title, String? message) async {
     final result =
-        await methodChannel.invokeMethod<String>('showBiometricPrompt');
+        await methodChannel.invokeMethod<String>('showBiometricPrompt', {
+      "title": title,
+      "subtitle": message,
+    });
+    //    await methodChannel.invokeMethod<String>('checkIsBiometricChange');
+    // await methodChannel.invokeMethod<String>('showBiometricPrompt');
     return result;
   }
 }

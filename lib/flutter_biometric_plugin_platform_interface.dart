@@ -24,11 +24,7 @@ abstract class FlutterBiometricPluginPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
-  Future<String?> getShowBiometricPromt() {
+  Future<String?> getShowBiometricPromt(String? title, String? message) {
     throw UnimplementedError(
         'getShowBiometricPromt() has not been implemented.');
   }

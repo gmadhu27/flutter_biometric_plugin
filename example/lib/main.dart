@@ -27,14 +27,15 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
+    String result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion = await _flutterBiometricPlugin.getShowBiometricPromt() ??
-          'Unknown platform version';
+      result = await _flutterBiometricPlugin.getShowBiometricPromt(
+              "Biometric Title", "Biometric Message") ??
+          'Failed';
     } on PlatformException {
-      platformVersion = 'Failed to get biometric promt.';
+      result = 'Failed to get biometric promt.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -43,7 +44,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _result = platformVersion;
+      _result = result;
     });
   }
 

@@ -7,23 +7,25 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 class MockFlutterBiometricPluginPlatform
     with MockPlatformInterfaceMixin
     implements FlutterBiometricPluginPlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 }
 
 void main() {
-  final FlutterBiometricPluginPlatform initialPlatform = FlutterBiometricPluginPlatform.instance;
+  final FlutterBiometricPluginPlatform initialPlatform =
+      FlutterBiometricPluginPlatform.instance;
 
   test('$MethodChannelFlutterBiometricPlugin is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelFlutterBiometricPlugin>());
+    expect(
+        initialPlatform, isInstanceOf<MethodChannelFlutterBiometricPlugin>());
   });
 
   test('getPlatformVersion', () async {
     FlutterBiometricPlugin flutterBiometricPlugin = FlutterBiometricPlugin();
-    MockFlutterBiometricPluginPlatform fakePlatform = MockFlutterBiometricPluginPlatform();
+    MockFlutterBiometricPluginPlatform fakePlatform =
+        MockFlutterBiometricPluginPlatform();
     FlutterBiometricPluginPlatform.instance = fakePlatform;
 
-    expect(await flutterBiometricPlugin.getPlatformVersion(), '42');
+    expect(await flutterBiometricPlugin.checkIsBiometricChange(), '42');
   });
 }
