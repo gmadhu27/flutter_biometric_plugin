@@ -1,6 +1,7 @@
 package com.example.flutter_biometric_plugin
 
 import android.app.Activity
+import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import androidx.annotation.NonNull
 import android.os.Handler
@@ -21,11 +22,13 @@ class FlutterBiometricPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
 
     private lateinit var channel: MethodChannel
     private var activity: FragmentActivity? = null
+    private lateinit var applicationContext: Context
 
     private val KEY_NAME = "biometric_key"
     private val ANDROID_KEYSTORE = "AndroidKeyStore"
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        this.applicationContext = flutterPluginBinding.applicationContext
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_biometric_plugin")
         channel.setMethodCallHandler(this)
     }
@@ -52,7 +55,7 @@ class FlutterBiometricPlugin : FlutterPlugin, ActivityAware, MethodCallHandler {
     }
 
     private fun checkIsBiometricSupport(title: String, subTitle: String, _result: MethodChannel.Result) {
-        val biometricManager = BiometricManager.from(activity!!)
+        val biometricManager = BiometricManager.from(applicationContext)
         val canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG or
                                                                 BiometricManager.Authenticators.BIOMETRIC_WEAK)
         when (canAuthenticate) {
