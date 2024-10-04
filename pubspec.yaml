@@ -1,7 +1,9 @@
 name: flutter_biometric_plugin
-description: "A new Flutter plugin project."
-version: 0.0.1
-homepage:
+description: A custom Flutter plugin for handling biometric authentication with support for fingerprint and facial recognition.
+
+version: 0.0.2
+homepage: https://github.com/gmadhu27
+repository: https://github.com/gmadhu27/flutter_biometric_plugin
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
